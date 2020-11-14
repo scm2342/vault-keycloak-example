@@ -1,0 +1,62 @@
+version: '3.3'
+
+services:
+  vault:
+    image: vault
+    restart: always
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ${PWD}/certs:/certs
+      - ${PWD}/vault/file:/vault/file
+      - ${PWD}/vault/logs:/vault/logs
+    network_mode: "host"
+    #ports:
+    #  - "127.0.0.1:8200:8200"
+    command: server
+    environment:
+      - 'VAULT_LOCAL_CONFIG={ "listener": { "tcp": { "address": "0.0.0.0:8200", "tls_cert_file": "/certs/cert.pem", "tls_disable_client-certs": true, "tls_key_file": "/certs/key.pem", "tls_min_version": "tls12" } }, "backend":{ "file": { "path": "/vault/file" } }, "ui": true, "disable_mlock": false }'
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: foobar
+    network_mode: "host"
+
+      #  mongo-express:
+      #    image: mongo-express
+      #    restart: always
+      #    ports:
+      #      - 8081:8081
+      #    environment:
+      #      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      #      ME_CONFIG_MONGODB_ADMINPASSWORD: foobar
+
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=FatyuejmagEjvorm5ShnopcarnIgyaks
+    volumes:
+      - "${PWD}/pgdata:/var/lib/postgresql/data:rw"
+    network_mode: "host"
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      - KEYCLOAK_USER=scm
+      - KEYCLOAK_PASSWORD=foobar
+      - DB_VENDOR=postgres
+      - DB_DATABASE=postgres
+      - DB_ADDR=localhost
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=FatyuejmagEjvorm5ShnopcarnIgyaks
+      # PROXY_ADDRESS_FORWARDING=true
+      # command: "-Dkeycloak.profile.feature.upload_scripts=enabled"
+      #ports:
+      #- "127.0.0.1:8080:8080"
+    network_mode: "host"
+    command: "-Djboss.bind.address.private=127.0.0.1 -Djboss.bind.address=127.0.0.1"
