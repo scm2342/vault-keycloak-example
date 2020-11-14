@@ -39,7 +39,7 @@ resource "vault_identity_group" "admin" {
 }
 
 resource "vault_identity_group_alias" "admin-oidc-alias" {
-  name           = "testitest"
-  mount_accessor = vault_jwt_auth_backend.keycloak.github.accessor
+  name           = "admin"
+  mount_accessor = vault_jwt_auth_backend.keycloak.accessor
   canonical_id   = vault_identity_group.admin.id
 }
