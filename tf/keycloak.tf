@@ -56,7 +56,7 @@ resource "keycloak_openid_client" "openid_client_vault" {
   access_type         = "CONFIDENTIAL"
   valid_redirect_uris = [
     "http://localhost:8250/oidc/callback",
-    "http://localhost:8200/ui/vault/auth/none/oidc/callback"
+    "http://localhost:8200/ui/vault/auth/oidc/oidc/callback"
     #"https://oidcdebugger.com/debug"
   ]
 

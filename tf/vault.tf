@@ -35,19 +35,3 @@ resource "vault_jwt_auth_backend_role" "keycloak-role" {
   bound_audiences = ["vault-client"]
   groups_claim = "vault_roles"
 }
-
-resource "vault_identity_group" "admin" {
-  name     = "admin"
-  type     = "external"
-  policies = ["default"]
-
-  #metadata = {
-  #  version = "1"
-  #}
-}
-
-resource "vault_identity_group_alias" "admin-oidc-alias" {
-  name           = "admin"
-  mount_accessor = vault_jwt_auth_backend.keycloak.accessor
-  canonical_id   = vault_identity_group.admin.id
-}
