@@ -18,6 +18,5 @@ provider "keycloak" {
 
 provider "vault" {
     address = "https://localhost:8200"
-#    token = "s.BkMrTjNPmcOaGhdoO5jBADiP"
     skip_tls_verify = true
 }

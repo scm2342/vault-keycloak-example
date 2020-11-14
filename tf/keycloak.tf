@@ -1,4 +1,4 @@
-resource "keycloak_realm" "realm" {
+resource "keycloak_realm" "vault" {
   realm             = "vault"
   enabled           = true
   display_name      = "Vault"
@@ -45,7 +45,7 @@ resource "keycloak_realm" "realm" {
 }
 
 resource "keycloak_openid_client" "openid_client_vault" {
-  realm_id            = keycloak_realm.realm.id
+  realm_id            = keycloak_realm.vault.id
   client_id           = "vault-client"
 
   name                = "Vault Client"
@@ -63,8 +63,23 @@ resource "keycloak_openid_client" "openid_client_vault" {
   login_theme = "keycloak"
 }
 
+resource "keycloak_openid_user_client_role_protocol_mapper" "vault_scope_mapper" {
+  realm_id   = keycloak_realm.vault.id
+  client_id  = keycloak_openid_client.openid_client_vault.id
+  name       = "vault_roles"
+  claim_name = "vault_roles"
+  multivalued = true
+}
+
+resource "keycloak_role" "vault_admin" {
+  realm_id    = keycloak_realm.vault.id
+  client_id   = keycloak_openid_client.openid_client_vault.id
+  name        = "admin"
+  description = "vault admin"
+}
+
 resource "keycloak_user" "scm" {
-  realm_id   = keycloak_realm.realm.id
+  realm_id   = keycloak_realm.vault.id
   username   = "scm"
   enabled    = true
 
@@ -80,4 +95,13 @@ resource "keycloak_user" "scm" {
     value     = "foobar"
     temporary = false
   }
+}
+
+resource "keycloak_user_roles" "scm_roles" {
+  realm_id = keycloak_realm.vault.id
+  user_id  = keycloak_user.scm.id
+
+  role_ids = [
+    keycloak_role.vault_admin.id
+  ]
 }
