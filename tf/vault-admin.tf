@@ -1,7 +1,7 @@
 resource "vault_identity_group" "admin" {
   name     = "admin"
   type     = "external"
-  policies = ["default"]
+  policies = ["default", vault_policy.admin.name]
 
   #metadata = {
   #  version = "1"
@@ -14,20 +14,16 @@ resource "vault_identity_group_alias" "admin-oidc-alias" {
   canonical_id   = vault_identity_group.admin.id
 }
 
-resource "vault_identity_group_policies" "group-admin-admin" {
-  policies = [
-    vault_policy.admin.name
-  ]
-
-  exclusive = false
-
-  group_id = vault_identity_group.admin.id
-}
-
 resource "vault_policy" "admin" {
   name = "admins"
 
   policy = <<EOT
+# Allow managing leases
+path "sys/leases/*"
+{
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+
 # Read system health check
 path "sys/health"
 {
@@ -39,7 +35,7 @@ path "sys/health"
 # List existing policies
 path "sys/policies/acl"
 {
-  capabilities = ["list"]
+  capabilities = ["read", "list"]
 }
 
 # Create and manage ACL policies
