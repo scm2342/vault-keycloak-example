@@ -16,7 +16,14 @@ resource "vault_jwt_auth_backend_role" "keycloak-role" {
   role_name       = "keycloak-role"
   #token_policies  = ["default", "dev", "prod"]
 
-  user_claim            = "sub"
+  user_claim            = "preferred_username"
   role_type             = "oidc"
   allowed_redirect_uris = ["http://localhost:8200/ui/vault/auth/oidc/oidc/callback", "http://localhost:8250/oidc/callback"]
+  claim_mappings = {
+    email: "email"
+    given_name: "given_name",
+    family_name: "family_name"
+  }
+  bound_audiences = ["vault-client"]
+  groups_claim = "vault_roles"
 }
