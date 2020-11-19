@@ -1,4 +1,5 @@
 # Vault Keycloak example
+**Do not use this in production. Only demonstration purposes**
 
 ## Steps to reproduce
 1. `docker-compose up -d`
