@@ -1,6 +1,6 @@
-resource "keycloak_user" "scm" {
+resource "keycloak_user" "admin" {
   realm_id   = keycloak_realm.vault.id
-  username   = "scm"
+  username   = "admin"
   enabled    = true
 
   email      = "sven@sven.cc"
@@ -17,9 +17,9 @@ resource "keycloak_user" "scm" {
   }
 }
 
-resource "keycloak_user_roles" "scm_roles" {
+resource "keycloak_user_roles" "admin_roles" {
   realm_id = keycloak_realm.vault.id
-  user_id  = keycloak_user.scm.id
+  user_id  = keycloak_user.admin.id
 
   role_ids = [
     keycloak_role.vault_admin.id

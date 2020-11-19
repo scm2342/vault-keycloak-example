@@ -38,7 +38,7 @@ services:
   postgres:
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=FatyuejmagEjvorm5ShnopcarnIgyaks
+      - POSTGRES_PASSWORD=foobar
     volumes:
       - "${PWD}/pgdata:/var/lib/postgresql/data:rw"
     network_mode: "host"
@@ -46,14 +46,14 @@ services:
   keycloak:
     image: jboss/keycloak
     environment:
-      - KEYCLOAK_USER=scm
+      - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=foobar
       - DB_VENDOR=postgres
       - DB_DATABASE=postgres
       - DB_ADDR=localhost
       - DB_PORT=5432
       - DB_USER=postgres
-      - DB_PASSWORD=FatyuejmagEjvorm5ShnopcarnIgyaks
+      - DB_PASSWORD=foobar
       # PROXY_ADDRESS_FORWARDING=true
       # command: "-Dkeycloak.profile.feature.upload_scripts=enabled"
       #ports:

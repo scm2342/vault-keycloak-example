@@ -10,7 +10,7 @@ terraform {
 
 provider "keycloak" {
     client_id     = "admin-cli"
-    username      = "scm"
+    username      = "admin"
     password      = "foobar"
     url           = "http://localhost:8080"
 }
